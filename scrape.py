@@ -1,8 +1,6 @@
 from selenium.webdriver import Remote, ChromeOptions
 from selenium.webdriver.chromium.remote_connection import ChromiumRemoteConnection
-from bs4 import BeautifulSoup
 from dotenv import load_dotenv
-import os
 import requests
 import streamlit as st
 
@@ -18,6 +16,12 @@ def scrape_website(website):
         response = requests.get("https://r.jina.ai/"+website)
         # st.write(response.text)
         return response.text
+
+
+def split_dom_content(dom_content, max_length=6000):
+    return [
+        dom_content[i : i + max_length] for i in range(0, len(dom_content), max_length)
+    ]
 
 
 # def extract_body_content(html_content):
@@ -42,8 +46,3 @@ def scrape_website(website):
 
 #     return cleaned_content
 
-
-def split_dom_content(dom_content, max_length=6000):
-    return [
-        dom_content[i : i + max_length] for i in range(0, len(dom_content), max_length)
-    ]

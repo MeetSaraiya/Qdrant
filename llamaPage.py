@@ -3,20 +3,26 @@ from langchain_core.prompts import ChatPromptTemplate
 
 model = OllamaLLM(model="llama3.2")
 
-requirement = "nothing"
-content = "nothing"
+template = (
+    "You are tasked with extracting specific information from the following text content: {dom_content}. "
+    "Please follow these instructions carefully: \n\n"
+    "1. **Extract Information:** Only extract the information that directly matches the provided description: {parse_description}. "
+    "2. **No Extra Content:** Do not include any additional text, comments, or explanations in your response. "
+    "3. **Empty Response:** If no information matches the description, return an empty string ('')."
+    "4. **Direct Data Only:** Your output should contain only the data that is explicitly requested, with no other text."
+)
 
-input_to_go = f"""
-        I need to {requirement}. The content provided below is a markdown representation of a website that was scraped. The content contains various sections and information, and I would like you to use it to {requirement}. You can analyze the entire markdown content to extract the relevant data.
+def get_answer_from_ollama(parse_description, dom_chunks):
+    prompt = ChatPromptTemplate.from_template(template)
+    chain = prompt | model
 
-        Markdown content:
-        {content}
+    parsed_results = []
 
-        Please ensure you extract only the information related to {requirement}, and return the result in a clear and organized manner. Your output should strictly adhere only to the requirements specified above.
-        And please provide the best accuracy as you can, this is an important task. 
-        """
-def get_answer_from_ollama(requirement, dom_content,input_1):
-    
-    return model.invoke(input=input_to_go)
+    for i, chunk in enumerate(dom_chunks, start=1):
+        response = chain.invoke(
+            {"dom_content": chunk, "parse_description": parse_description}
+        )
+        print(f"Parsed batch: {i} of {len(dom_chunks)}")
+        parsed_results.append(response)
+    return "\n".join(parsed_results)
 
-result = model.invoke(input=input_to_go)

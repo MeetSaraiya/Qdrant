@@ -1,9 +1,12 @@
 import streamlit as st
-from scrape import scrape_website
+from scrape import scrape_website,split_dom_content
 from chucks import upload_embeddings
 from ingest import search_in_qdrant
 from llamaPage import get_answer_from_ollama
-from llamaPage import input_to_go
+from langchain_ollama import OllamaLLM
+from langchain_core.prompts import ChatPromptTemplate
+
+model = OllamaLLM(model="llama3.2")
 
 st.title("**Your Scraper**")
 
@@ -29,11 +32,23 @@ if "Extract Information" :
         if parse_description:
             st.write("Parsing the content...")
             answer = search_in_qdrant(parse_description)
-            if answer:
-                final_result = get_answer_from_ollama(parse_description, answer,input_1=input_to_go)
-                # st.write(final_result)
-                with st.expander("**View ANS**"):
-                    st.text_area("**DOM content**", final_result, height=800)
+           
+            input_to_go = f"""
+                    I need to {parse_description}. The content provided below is a markdown representation of a website that was scraped. The content contains various sections and information, and I would like you to use it to {parse_description}. You can analyze the entire markdown content to extract the relevant data.
+
+                    Markdown content:
+                    {answer}
+
+                    Please ensure you extract only the information related to {parse_description}, and return the result in a clear and organized manner.
+                    """
+
+
+            answer = model.invoke(input=input_to_go)
+            st.text_area("**DOM content**", answer, height=800)
+           
+
+
+
             # Parse the content with Ollama
             # dom_chunks = split_dom_content(st.session_state.dom_content)
             # parsed_result = parse_with_gemini(st.session_state.dom_content, parse_description)

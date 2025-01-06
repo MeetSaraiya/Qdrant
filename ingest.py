@@ -1,3 +1,4 @@
+import os
 from qdrant_client import QdrantClient
 from qdrant_client.models import Distance, VectorParams
 from ollama import embeddings
@@ -10,13 +11,13 @@ import random
 
 
 qdrant_client = QdrantClient(
-    url="https://d2f316e5-aecb-484f-a515-bdb0d61143f3.us-west-1-0.aws.cloud.qdrant.io:6333", 
+    url= os.getenv("QDRANT_URL"), 
     api_key="A97ywzviKu5LylwwpAuFg3v-seSzqJIQHNI59_xa2B7MFCjqKOL4hw",
 )
 
 collection_name = "web_scrapper"
 
-fetchURL = "https://d2f316e5-aecb-484f-a515-bdb0d61143f3.us-west-1-0.aws.cloud.qdrant.io:6333/dashboard#/collections/web_scrapper", 
+fetchURL = os.getenv("FETCH_URL"), 
 headers = { "Content-Type": "application/json" }
 
 # qdrant_client.create_collection(collection_name="web_scrapper",
@@ -53,7 +54,7 @@ def search_in_qdrant(text):
         collection_name="web_scrapper",
         query=embeddings.embedding,
         with_payload=True,
-        limit=5
+        limit=2
     )
     print(search_results)
     return search_results
