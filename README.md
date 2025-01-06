@@ -48,7 +48,11 @@ This project is licensed under the MIT License. See the [LICENSE](LICENSE) file 
 ## Contact
 For any questions or feedback, please contact us at [email@example.com](mailto:email@example.com).
 
+<<<<<<< HEAD
 ### create '.env' file and add this
+=======
+## create '.env' file and add this
+>>>>>>> e25e97d1267d5cea5a10da8701346c7d8cf97ca9
 GOOGLE_API_KEY = "gemini key"
 FETCH_URL = "**qdrant url**/dashboard#/collections/web_scrapper"
 QDRANT_URL = "qdrant url"
