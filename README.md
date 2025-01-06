@@ -1,4 +1,4 @@
-# Qdrant Project
+# Web Scrapper Project
 
 ## Overview
 Qdrant is a high-performance, vector similarity search engine and database. It is designed to handle large-scale, high-dimensional data and provide fast and accurate search results.
