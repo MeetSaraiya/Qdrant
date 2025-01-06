@@ -14,7 +14,7 @@ To install Qdrant, follow these steps:
 
 ```bash
 # Clone the repository
-git clone https://github.com/yourusername/qdrant.git
+git clone [https://github.com/MeetSaraiya/Qdrant.git]
 
 # Navigate to the project directory
 cd qdrant
